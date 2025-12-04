@@ -72,7 +72,7 @@ const questions = [
     { q: "Lesion", a: "L" },
     { q: "リストの前のポイントを選択", a: "ArrowUp" },
     { q: "リストの次のポイントを選択", a: "ArrowDown" },
-    { q: "前のポイントグループを選択", a: "Alt+ArrowUo" },
+    { q: "前のポイントグループを選択", a: "Alt+ArrowUp" },
     { q: "次のポイントグループを選択", a: "Alt+ArrowDown" },
     { q: "リストの最初のポイントを選択", a: "Home" },
     { q: "リストの最後のポイントを選択", a: "End" },
@@ -139,7 +139,7 @@ function handleKeyUp(e) {
             document.getElementById("result").style.color = "lime";
             score++;
         } else {
-            document.getElementById("result").innerHTM = `❌ 不正解。押したキー: ${pressed} <br> 正解: ${correctAnswer}`;
+            document.getElementById("result").innerHTML = `❌ 不正解。押したキー: ${pressed} <br> 正解: ${correctAnswer}`;
             document.getElementById("result").style.color = "pink";
         }
 
