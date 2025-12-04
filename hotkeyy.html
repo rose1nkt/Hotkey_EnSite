@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>HOTKEY QUIZ</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 600px;
+        margin: 80px auto;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    h1 { font-size: 28px; margin-bottom: 20px; }
+    #question { font-size: 22px; margin-bottom: 20px; }
+    #result { font-size: 20px; margin-top: 15px; }
+    #score { font-size: 22px; margin-top: 20px; font-weight: bold; }
+    .hint { font-size: 14px; margin-top: 10px; color: #ddd; }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>ショートカットキー クイズ</h1>
+    <div id="question"></div>
+    <div class="hint">※ 実際にキーを押してください（F1~12の場合はfnキーも押してください）</div>
+    <div id="result"></div>
+    <div id="score"></div>
+</div>
+
+<script>
+const questions = [
+    { q: "イベントを保存", a: "Control+E" },
+    { q: "ブックマークを保存", a: "Control+B" },
+    { q: "スタディの終了", a: "Control+Q" },
+    { q: "ヘルプダイアログの表示", a: "F1" },
+    { q: "スプリットスクリーンをシンクロ", a: "F3" },
+    { q: "Voxelポイントの表示/非表示", a: "Control+K" },
+    { q: "呼吸データの収集", a: "Alt+R" },
+    { q: "セグメントの記録", a: "F4" },
+    { q: "Active EnGuideでリージョンを追加", a: "F6" },
+    { q: "Active EnGuideで3Dリージョンを追加", a: "Shift+F6" },
+    { q: "トルソーの水平軸(AP)を中心に後方に回転", a: "W" }, // 単独キー対応
+];
+
+let shuffled = questions.sort(() => Math.random() - 0.5);
+let index = 0;
+let score = 0;
+let pressedKeys = new Set();
+let comboHistory = [];
+
+function showQuestion() {
+    if (index < shuffled.length) {
+        document.getElementById("question").textContent = `問題 ${index+1}: ${shuffled[index].q}`;
+        document.getElementById("result").textContent = "";
+        pressedKeys.clear();
+        comboHistory = [];
+    } else {
+        document.getElementById("question").textContent = "テスト終了！";
+        document.getElementById("score").textContent = `あなたのスコア: ${score}/${shuffled.length}`;
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+    }
+}
+
+function handleKeyDown(e) {
+    e.preventDefault(); // ブラウザのデフォルト動作を防止
+    pressedKeys.add(e.code);
+    if (!comboHistory.includes(e.code)) {
+        comboHistory.push(e.code);
+    }
+}
+
+function handleKeyUp(e) {
+    pressedKeys.delete(e.code);
+    if (pressedKeys.size === 0) {
+        // 判定はすべてのキーが離されたタイミング
+        const combo = [];
+        if (comboHistory.includes("ControlLeft") || comboHistory.includes("ControlRight")) combo.push("Control");
+        if (comboHistory.includes("ShiftLeft") || comboHistory.includes("ShiftRight")) combo.push("Shift");
+        if (comboHistory.includes("AltLeft") || comboHistory.includes("AltRight")) combo.push("Alt");
+
+        // 修飾キー以外の最後のキーを追加
+        const nonModifierKeys = comboHistory.filter(k => !k.includes("Control") && !k.includes("Shift") && !k.includes("Alt"));
+        if (nonModifierKeys.length > 0) {
+            const lastKey = nonModifierKeys[nonModifierKeys.length - 1];
+            // KeyA → A, Digit1 → 1, F2 → F2
+            const formattedKey = lastKey.replace("Key", "").replace("Digit", "");
+            combo.push(formattedKey);
+        }
+
+        const pressed = combo.join("+");
+        const correctAnswer = shuffled[index].a;
+
+        if (pressed === correctAnswer) {
+            document.getElementById("result").textContent = "✅ 正解！";
+            document.getElementById("result").style.color = "lime";
+            score++;
+        } else {
+            document.getElementById("result").textContent = `❌ 不正解。押したキー: ${pressed} / 正解: ${correctAnswer}`;
+            document.getElementById("result").style.color = "pink";
+        }
+
+        index++;
+        setTimeout(showQuestion, 3000);
+        comboHistory = [];
+    }
+}
+
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
+showQuestion();
+</script>
+</body>
+</html>
