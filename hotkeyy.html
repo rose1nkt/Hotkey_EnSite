@@ -29,7 +29,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>ショートカットキー クイズ</h1>
+    <h1>ENSITE HOTKEY QUIZ</h1>
     <div id="question"></div>
     <div class="hint">※ 実際にキーを押してください（F1~12の場合はfnキーも押してください）</div>
     <div id="result"></div>
@@ -39,8 +39,8 @@
 <script>
 const questions = [
     { q: "イベントを保存", a: "Control+E" },
-    { q: "ブックマークを保存", a: "Control+B" },
-    { q: "スタディの終了", a: "Control+Q" },
+    { q: "Bookmarkを保存", a: "Control+B" },
+    { q: "Studyの終了", a: "Control+Q" },
     { q: "ヘルプダイアログの表示", a: "F1" },
     { q: "スプリットスクリーンをシンクロ", a: "F3" },
     { q: "Voxelポイントの表示/非表示", a: "Control+K" },
@@ -48,7 +48,41 @@ const questions = [
     { q: "セグメントの記録", a: "F4" },
     { q: "Active EnGuideでリージョンを追加", a: "F6" },
     { q: "Active EnGuideで3Dリージョンを追加", a: "Shift+F6" },
-    { q: "トルソーの水平軸(AP)を中心に後方に回転", a: "W" }, // 単独キー対応
+    { q: "APを中心に後方に回転", a: "W" }, // 単独キー対応
+    { q: "APを中心に前方に回転", a: "S" },
+    { q: "APを中心とした左方向への回転", a: "A" },
+    { q: "APを中心とした右方向への回転", a: "D" },
+    { q: "消しゴムツールのサンドペーパーによる補正", a: "F2" },
+    { q: "消しゴムツールの種類の切替", a: "Z" },
+    { q: "モデルポイント削除の取消", a: "Control+Z" },
+    { q: "モデルの作成/AutoMapによるデータ収集の停止", a: "F9" },
+    { q: "Mapping PointのFreeze/保存", a: "F11" },
+    { q: "現在のMapping Pointの破棄", a: "F12" },
+    { q: "AutoMapの開始/停止", a: "Shift+F11" },
+    { q: "ビートバッファの後退", a: "ArrowLeft" },
+    { q: "ビートバッファの前進", a: "ArrowRight" },
+    { q: "ツールリストを開く/閉じる", a: "O" },
+    { q: "ローテート/パン", a: "R" },
+    { q: "ポインター", a: "P" },
+    { q: "Shadow", a: "H" },
+    { q: "Marker", a: "M" },
+    { q: "Tape Measure", a: "T" },
+    { q: "Caliper", a: "C" },
+    { q: "Label", a: "B" },
+    { q: "Lesion", a: "L" },
+    { q: "リストの前のポイントを選択", a: "ArrowUp" },
+    { q: "リストの次のポイントを選択", a: "ArrowDown" },
+    { q: "前のポイントグループを選択", a: "Alt+ArrowUo" },
+    { q: "次のポイントグループを選択", a: "Alt+ArrowDown" },
+    { q: "リストの最初のポイントを選択", a: "Home" },
+    { q: "リストの最後のポイントを選択", a: "End" },
+    { q: "すべてのポイントを選択", a: "Control+A" },
+    { q: "グループ内のすべてのポイントを選択", a: "Control+G" },
+    { q: "グループ内のすべてのポイントを既存の選択範囲に追加", a: "Control+Shift+G" },
+    { q: "選択されたポイントを削除", a: "Delete" },
+    { q: "ポイントグループを削除", a: "Alt+Delete" },
+    { q: "選択したポイントへのスクロール", a: "Alt+Home" },
+    { q: "選択したポイントをMapに表示", a: "Control+L" },
 ];
 
 let shuffled = questions.sort(() => Math.random() - 0.5);
@@ -105,12 +139,12 @@ function handleKeyUp(e) {
             document.getElementById("result").style.color = "lime";
             score++;
         } else {
-            document.getElementById("result").textContent = `❌ 不正解。押したキー: ${pressed} / 正解: ${correctAnswer}`;
+            document.getElementById("result").innerHTM = `❌ 不正解。押したキー: ${pressed} <br> 正解: ${correctAnswer}`;
             document.getElementById("result").style.color = "pink";
         }
 
         index++;
-        setTimeout(showQuestion, 3000);
+        setTimeout(showQuestion, 2000);
         comboHistory = [];
     }
 }
